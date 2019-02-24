@@ -1,5 +1,6 @@
 #ifndef defs_h
 #define defs_h
+
 void errorExit(int code, const char * exitData);
 std::string randomString();
 void pressVKey(unsigned short key);
@@ -8,14 +9,18 @@ void click();
 void trigger();
 void esp();
 void bhop();
+bool fov = false;
+
 pid_t csgoPid = NULL;
 task_t csgoTask = NULL;
 mach_vm_address_t clientModule;
 mach_vm_address_t engineModule;
 uint64_t glowObjectManager;
+
 struct clr { float r, g, b, a; };
 struct Vec3 { float x, y, z; };
 static const char alphanum[] = "0123456789!@#$%^&*ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
 //OFFSETS
 uint64_t crosshairid = 0xbce8;
 uint64_t healthOffset = 0x138;
@@ -38,6 +43,7 @@ uint64_t m_bUseCustomAutoExposureMin = 0x0F65;
 uint64_t m_bUseCustomAutoExposureMax =  0x0F66;
 uint64_t m_flCustomAutoExposureMin =  0x0F68;
 uint64_t m_flCustomAutoExposureMax =  0x0F6C;
+
 #define TEAM_SPECTATOR 1
 #define TEAM_TERRORIST 2
 #define TEAM_COUNTERTERRORIST 3

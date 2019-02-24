@@ -9,15 +9,13 @@ public:
         for (int i = 1; i < sizeof(pids); i++) {
             char curpidName[1024];
             proc_name(pids[i], curpidName, sizeof(curpidName));
-            if (!strncmp(curpidName, procName, sizeof(procName)))
-                return pids[i];
+            if (!strncmp(curpidName, procName, sizeof(procName))) return pids[i];
         }
         return 0;
     }
     int getTask(pid_t pid) {
         task_t task;
-        if (task_for_pid(current_task(), pid, &task) == KERN_FAILURE)
-            errorExit(2, " Yoinks! task_for_pid() failure... You might need to disable SIP (rootless)...");
+        if (task_for_pid(current_task(), pid, &task) == KERN_FAILURE) errorExit(2, " Yoinks! task_for_pid() failure... You might need to disable SIP (rootless)...");
         return task;
     }
     mach_vm_address_t getModule(const char * modName) {
@@ -45,13 +43,9 @@ public:
             dataCount = 1024;
             vm_read(csgoTask, (mach_vm_address_t)dii[i].imageFilePath, dataCount, &readOut, &dataCount);
             char *imgName = (char *)readOut;
-            if (imgName)
-                g_dii[i].imageFilePath = strdup(imgName);
-            else
-                g_dii[i].imageFilePath = NULL;
+            if (imgName) g_dii[i].imageFilePath = strdup(imgName); else g_dii[i].imageFilePath = NULL;
             g_dii[i].imageLoadAddress = dii[i].imageLoadAddress;
-            if (strstr(imgName, modName) != NULL)
-                return (mach_vm_address_t)dii[i].imageLoadAddress;
+            if (strstr(imgName, modName) != NULL) return (mach_vm_address_t)dii[i].imageLoadAddress;
         }
         return NULL;
     }
@@ -84,27 +78,25 @@ class memstuffs {
 public:
     void initCSGOPid() {
         csgoPid = Memory->getProcessId("csgo_osx64");
-        if (csgoPid == 0)
-            errorExit(1, " Zoinks! Couldn't find CS:GO! Are you sure CS:GO is running?");
+        if (csgoPid == 0) errorExit(1, " Zoinks! Couldn't find CS:GO! Are you sure CS:GO is running?");
     }
     void getCSGOTask() {
         csgoTask = Memory->getTask(csgoPid);
     }
     void getClient() {
         clientModule = Memory->getModule("/client_panorama.dylib");
-        if (clientModule == NULL)
-            errorExit(5, " Hocking Heck! Couldn't get client_panorama.dylib!");
+        if (clientModule == NULL) errorExit(5, " Hocking Heck! Couldn't get client_panorama.dylib!");
     }
     void getEngine() {
         engineModule = Memory->getModule("/engine.dylib");
-        if (engineModule == NULL)
-            errorExit(6, " Dang! Couldn't get engine.dylib!");
+        if (engineModule == NULL) errorExit(6, " Dang! Couldn't get engine.dylib!");
     }
     void setupGlowManager() {
         glowObjectManager = Memory->read<uint64_t>(clientModule + dwGlowObjectManager);
     }
 };
 memstuffs * memHelper = new memstuffs(); // Game helper
+
 class player {
 public:
     uint64_t playerAddress;

@@ -40,7 +40,6 @@ int main(int argc, const char * argv[]) {
         std::thread bhopThread(bhop);
         bhopThread.detach();
     }
-    bool fov = false;
     while (true) {
         std::cout << "\033]0;" << randomString() << "\007";
         std::this_thread::sleep_for(std::chrono::milliseconds(20));
@@ -89,9 +88,7 @@ void bhop() {
 std::string randomString() {
     int alphaLength = sizeof(alphanum) - 1;
     std::string a;
-    for (int z = 0; z < rand(); z++) {
-        a += alphanum[rand() % alphaLength];
-    }
+    for (int z = 0; z < rand(); z++) a += alphanum[rand() % alphaLength];
     return a;
 }
 void errorExit(int code, const char * exitData) {
