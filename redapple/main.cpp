@@ -16,6 +16,7 @@
 #include "helper.h"
 #include "CONFIG.h"
 player ourPlayer;
+int ourTeam, ourHealth;
 int main(int argc, const char * argv[]) {
     srand(time(NULL));
     if (getuid() != 0) errorExit(255, " Yikes, Gotta run as root; We can't use task_for_pid() without being root.");
@@ -34,7 +35,9 @@ int main(int argc, const char * argv[]) {
         bhopThread.detach();
     }
     while (true) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(20));
+        std::this_thread::sleep_for(std::chrono::milliseconds(250));
+        ourTeam = ourPlayer.team();
+        ourHealth = ourPlayer.health();
         std::cout << "\033]0;" << randomString() << "\007"; // Change console title
         if (isPressed(FOVSWITCH_KEY)) {
             fov = !fov;
@@ -42,37 +45,40 @@ int main(int argc, const char * argv[]) {
             else Memory->write(ourPlayer.playerAddress + iDefaultFOV, DEFAULTFOV); // DEFAULT FOV
             std::this_thread::sleep_for(std::chrono::seconds(1));
         }
-        if (isPressed(FORCEQUIT_KEY_1) && isPressed(FORCEQUIT_KEY_2)) exit(128);
+        if (isPressed(FORCEQUIT_KEY)) exit(128);
     }
     return 0;
 }
 void esp() {
+    std::this_thread::sleep_for(std::chrono::seconds(1));
     player espPlayer;
     while (true) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(6));
+        std::this_thread::sleep_for(std::chrono::milliseconds(60));
         for (int i = 1; i <= 64; i++) {
             espPlayer.initialize(i);
-            espPlayer.glowOutline(ourPlayer.team());
+            espPlayer.glowOutline(ourTeam);
         }
     }
 }
 void trigger() {
+    std::this_thread::sleep_for(std::chrono::seconds(1));
     while (true) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(6));
-        if (isPressed(TRIGGERBOT_KEY) && ourPlayer.isLivePlayer()) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(12));
+        if (isPressed(TRIGGERBOT_KEY) && ourPlayer.isLivePlayer(ourHealth)) {
             int xhair = Memory->read<int>(ourPlayer.playerAddress + crosshairid);
             player xhairPlayer;
             if (xhair <= 64 && xhair > 0) {
                 xhairPlayer.initializeXhair(xhair - 1); // Some reason 0x10 didn't work. 0x20 did
-                if (xhairPlayer.team() != ourPlayer.team() && xhairPlayer.isLivePlayer()) click();
+                if (xhairPlayer.team() != ourTeam && xhairPlayer.isLivePlayer(xhairPlayer.health())) click();
             }
         }
     }
 }
 void bhop() {
+    std::this_thread::sleep_for(std::chrono::seconds(1));
     while (true) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(6));
-        if (ourPlayer.isLivePlayer() && isPressed(BHOP_KEY) && ourPlayer.flags() & PL_INAIR) pressVKey(kVK_Space);
+        std::this_thread::sleep_for(std::chrono::milliseconds(24));
+        if (ourPlayer.isLivePlayer(ourHealth) && isPressed(BHOP_KEY) && ourPlayer.flags() & PL_INAIR) pressVKey(kVK_Space);
     }
 }
 std::string randomString() {

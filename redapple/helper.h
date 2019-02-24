@@ -134,8 +134,8 @@ public:
         if (this->team() == 2 || this->team() == 3) return true;
         return false;
     }
-    bool isLivePlayer() {
-        if (this->health() > 0)
+    bool isLivePlayer(int pHeal) {
+        if (pHeal > 0)
             return true; // Sometimes I would get a player that ain't real
         return false; // so now I check if they have a real team
     }
@@ -151,31 +151,29 @@ public:
     void glowOutline(int ourTeam) {
         uint64_t glowBase = glowObjectManager + (0x40 * this->glowIndex());
         clr playerGlowColor;
-        if (this->isLivePlayer()) {
-            if (this->isDoingObjective()) { // Defusing or grabbing, different colour
-                playerGlowColor.r = 0.0f;
-                playerGlowColor.g = 255.0f;
-                playerGlowColor.b = 255.0f;
-                playerGlowColor.a = 10.0f;
-            } else if (this->team() == ourTeam) { // Teammate
-                playerGlowColor.r = 0.0f;
-                playerGlowColor.g = 1.0f;
-                playerGlowColor.b = 255.0f;
-                playerGlowColor.a = 0.25f;
-            } else if (this->isScoped()) { // Scoped In
-                playerGlowColor.r = 0.0f;
-                playerGlowColor.g = 125.0f;
-                playerGlowColor.b = 0.0f;
-                playerGlowColor.a = 0.75f;
-            } else { // Enemy
-                playerGlowColor.r = 255.0f;
-                playerGlowColor.g = 0.0f;
-                playerGlowColor.b = 0.0f;
-                playerGlowColor.a = 0.5f;
-            }
-            Memory->write<clr>(glowBase + 0x8, playerGlowColor);
-            Memory->write<bool>(glowBase + 0x28, true); // Render when occluded
+        if (this->isDoingObjective()) { // Defusing or grabbing, different colour
+            playerGlowColor.r = 0.0f;
+            playerGlowColor.g = 255.0f;
+            playerGlowColor.b = 255.0f;
+            playerGlowColor.a = 10.0f;
+        } else if (this->team() == ourTeam) { // Teammate
+            playerGlowColor.r = 0.0f;
+            playerGlowColor.g = 1.0f;
+            playerGlowColor.b = 255.0f;
+            playerGlowColor.a = 0.25f;
+        } else if (this->isScoped()) { // Scoped In
+            playerGlowColor.r = 0.0f;
+            playerGlowColor.g = 125.0f;
+            playerGlowColor.b = 0.0f;
+            playerGlowColor.a = 0.75f;
+        } else { // Enemy
+            playerGlowColor.r = 255.0f;
+            playerGlowColor.g = 0.0f;
+            playerGlowColor.b = 0.0f;
+            playerGlowColor.a = 0.5f;
         }
+        Memory->write<clr>(glowBase + 0x8, playerGlowColor);
+        Memory->write<bool>(glowBase + 0x28, true); // Render when occluded
     }
 };
 #endif /* helper_h */

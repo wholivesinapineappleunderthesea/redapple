@@ -21,8 +21,7 @@
 //KEYS
 #define FOVSWITCH_KEY kVK_ANSI_Keypad3 // FOV switch key
 #define TRIGGERBOT_KEY kVK_ANSI_X // Triggerbot key
-#define FORCEQUIT_KEY_1 kVK_PageDown // Forcequit key 1
-#define FORCEQUIT_KEY_2 kVK_PageUp // If you only want 1 key, set FORCEQUIT_KEY_2 to what you used on FORCEQUIT_KEY_1
+#define FORCEQUIT_KEY kVK_PageDown // Forcequit key
 #define BHOP_KEY kVK_ANSI_KeypadMinus
 
 //Colours can be changed in helper.h around line 150
