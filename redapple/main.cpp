@@ -19,11 +19,7 @@ player ourPlayer;
 int main(int argc, const char * argv[]) {
     srand(time(NULL));
     if (getuid() != 0) errorExit(255, " Yikes, Gotta run as root; We can't use task_for_pid() without being root.");
-    memHelper->initCSGOPid();
-    memHelper->getCSGOTask();
-    memHelper->getClient();
-    memHelper->getEngine();
-    memHelper->setupGlowManager();
+    memHelper->setup();
     ourPlayer.initializeLocal();
     if (espEnabled) {
         std::thread espThread(esp);
@@ -40,26 +36,23 @@ int main(int argc, const char * argv[]) {
     while (true) {
         std::this_thread::sleep_for(std::chrono::milliseconds(20));
         std::cout << "\033]0;" << randomString() << "\007"; // Change console title
-        ourPlayer.initializeLocal(); // IDK if localplayer changes, it shouldn't. However I had some issues not having this
         if (isPressed(FOVSWITCH_KEY)) {
             fov = !fov;
             if (fov) Memory->write(ourPlayer.playerAddress + iDefaultFOV, CUSTOMFOV); // CUSTOM FOV
             else Memory->write(ourPlayer.playerAddress + iDefaultFOV, DEFAULTFOV); // DEFAULT FOV
-            std::this_thread::sleep_for(std::chrono::seconds(2));
+            std::this_thread::sleep_for(std::chrono::seconds(1));
         }
         if (isPressed(FORCEQUIT_KEY_1) && isPressed(FORCEQUIT_KEY_2)) exit(128);
     }
     return 0;
 }
 void esp() {
+    player espPlayer;
     while (true) {
         std::this_thread::sleep_for(std::chrono::milliseconds(6));
-        if (ourPlayer.isLivePlayer()) {
-            for (int i = 1; i <= 64; i++) {
-                player espPlayer;
-                espPlayer.initialize(i);
-                espPlayer.glowOutline(ourPlayer.team());
-            }
+        for (int i = 1; i <= 64; i++) {
+            espPlayer.initialize(i);
+            espPlayer.glowOutline(ourPlayer.team());
         }
     }
 }

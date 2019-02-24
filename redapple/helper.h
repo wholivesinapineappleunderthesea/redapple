@@ -94,6 +94,13 @@ public:
     void setupGlowManager() {
         glowObjectManager = Memory->read<uint64_t>(clientModule + dwGlowObjectManager);
     }
+    void setup() {
+        initCSGOPid();
+        getCSGOTask();
+        getClient();
+        getEngine();
+        setupGlowManager();
+    }
 };
 memstuffs * memHelper = new memstuffs(); // Game helper
 
@@ -104,6 +111,9 @@ public:
         if (Memory->read<bool>(this->playerAddress + isTakingHostage) || Memory->read<bool>(playerAddress + isDefusing))
             return true;
         return false;
+    }
+    bool isVis() {
+        return Memory->read<bool>(this->playerAddress + isSpotted);
     }
     int health() {
         return Memory->read<int>(this->playerAddress + healthOffset);
@@ -119,6 +129,10 @@ public:
     }
     bool isScoped() {
         return Memory->read<bool>(this->playerAddress + b_isScoped);
+    }
+    bool hasRealTeam() {
+        if (this->team() == 2 || this->team() == 3) return true;
+        return false;
     }
     bool isLivePlayer() {
         if (this->health() > 0)

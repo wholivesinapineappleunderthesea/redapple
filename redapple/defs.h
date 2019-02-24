@@ -19,7 +19,7 @@ uint64_t glowObjectManager;
 
 struct clr { float r, g, b, a; };
 struct Vec3 { float x, y, z; };
-static const char alphanum[] = "0123456789!@#$%^&*ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+static const char alphanum[] = "!@#wvutsrqponmlkjihgfedcbaZYXWVUTSRQPONMLKJIHGFEDCBA9876543210*&^%$xyz";
 
 //OFFSETS
 uint64_t crosshairid = 0xbce8;
@@ -29,7 +29,7 @@ uint64_t m_clrRender = 0x0A8;
 uint64_t m_fFlags = 0x13C;
 uint64_t teamOffset = 0x12C;
 uint64_t b_isScoped = 0x41FE;
-uint64_t isSpotted = 0x2AC;
+uint64_t isSpotted = 0x0ECD;
 uint64_t isDefusing = 0x4208;
 uint64_t isTakingHostage = 0x4209;
 uint64_t m_iGlowIndex = 0xAD18;
