@@ -18,10 +18,7 @@
 player ourPlayer;
 int main(int argc, const char * argv[]) {
     srand(time(NULL));
-    if (getuid() != 0) {
-        printf("Yikes, Gotta run as root; We can't use task_for_pid() without being root. Try: \n\n\e[0;34msudo %s\e[0m\n\n", argv[0]);
-        exit(255);
-    }
+    if (getuid() != 0) errorExit(255, " Yikes, Gotta run as root; We can't use task_for_pid() without being root.");
     memHelper->initCSGOPid();
     memHelper->getCSGOTask();
     memHelper->getClient();
@@ -41,8 +38,9 @@ int main(int argc, const char * argv[]) {
         bhopThread.detach();
     }
     while (true) {
-        std::cout << "\033]0;" << randomString() << "\007";
         std::this_thread::sleep_for(std::chrono::milliseconds(20));
+        std::cout << "\033]0;" << randomString() << "\007"; // Change console title
+        ourPlayer.initializeLocal(); // IDK if localplayer changes, it shouldn't. However I had some issues not having this
         if (isPressed(FOVSWITCH_KEY)) {
             fov = !fov;
             if (fov) Memory->write(ourPlayer.playerAddress + iDefaultFOV, CUSTOMFOV); // CUSTOM FOV
@@ -50,7 +48,6 @@ int main(int argc, const char * argv[]) {
             std::this_thread::sleep_for(std::chrono::seconds(2));
         }
         if (isPressed(FORCEQUIT_KEY_1) && isPressed(FORCEQUIT_KEY_2)) exit(128);
-        ourPlayer.initializeLocal();
     }
     return 0;
 }
