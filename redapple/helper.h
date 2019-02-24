@@ -112,33 +112,6 @@ public:
             return true;
         return false;
     }
-    bool isVis() {
-        return Memory->read<bool>(this->playerAddress + isSpotted);
-    }
-    int health() {
-        return Memory->read<int>(this->playerAddress + healthOffset);
-    }
-    int team() {
-        return Memory->read<int>(this->playerAddress + teamOffset);
-    }
-    int glowIndex() {
-        return Memory->read<int>(this->playerAddress + m_iGlowIndex);
-    }
-    int flags() {
-        return Memory->read<int>(this->playerAddress + m_fFlags);
-    }
-    bool isScoped() {
-        return Memory->read<bool>(this->playerAddress + b_isScoped);
-    }
-    bool hasRealTeam() {
-        if (this->team() == 2 || this->team() == 3) return true;
-        return false;
-    }
-    bool isLivePlayer(int pHeal) {
-        if (pHeal > 0)
-            return true; // Sometimes I would get a player that ain't real
-        return false; // so now I check if they have a real team
-    }
     void initialize(int index) {
         this->playerAddress = Memory->read<uint64_t>(clientModule + dwEntityList + index * 0x10);
     }
@@ -149,19 +122,19 @@ public:
         this->playerAddress = Memory->read<uint64_t>(clientModule + dwLocalPlayer);
     }
     void glowOutline(int ourTeam) {
-        uint64_t glowBase = glowObjectManager + (0x40 * this->glowIndex());
+        uint64_t glowBase = glowObjectManager + (0x40 * Memory->read<int>(this->playerAddress + m_iGlowIndex));
         clr playerGlowColor;
         if (this->isDoingObjective()) { // Defusing or grabbing, different colour
             playerGlowColor.r = 0.0f;
             playerGlowColor.g = 255.0f;
             playerGlowColor.b = 255.0f;
             playerGlowColor.a = 10.0f;
-        } else if (this->team() == ourTeam) { // Teammate
+        } else if (Memory->read<int>(this->playerAddress + teamOffset) == ourTeam) { // Teammate
             playerGlowColor.r = 0.0f;
             playerGlowColor.g = 1.0f;
             playerGlowColor.b = 255.0f;
             playerGlowColor.a = 0.25f;
-        } else if (this->isScoped()) { // Scoped In
+        } else if (Memory->read<int>(this->playerAddress + b_isScoped)) { // Scoped In
             playerGlowColor.r = 0.0f;
             playerGlowColor.g = 125.0f;
             playerGlowColor.b = 0.0f;

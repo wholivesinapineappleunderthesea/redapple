@@ -34,17 +34,13 @@ int main(int argc, const char * argv[]) {
         std::thread bhopThread(bhop);
         bhopThread.detach();
     }
+    ourTeam = Memory->read<int>(ourPlayer.playerAddress + teamOffset);
+    ourHealth = Memory->read<int>(ourPlayer.playerAddress + healthOffset);
     while (true) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(250));
-        ourTeam = ourPlayer.team();
-        ourHealth = ourPlayer.health();
+        std::this_thread::sleep_for(std::chrono::seconds(5));
+        ourTeam = Memory->read<int>(ourPlayer.playerAddress + teamOffset);
+        ourHealth = Memory->read<int>(ourPlayer.playerAddress + healthOffset);
         std::cout << "\033]0;" << randomString() << "\007"; // Change console title
-        if (isPressed(FOVSWITCH_KEY)) {
-            fov = !fov;
-            if (fov) Memory->write(ourPlayer.playerAddress + iDefaultFOV, CUSTOMFOV); // CUSTOM FOV
-            else Memory->write(ourPlayer.playerAddress + iDefaultFOV, DEFAULTFOV); // DEFAULT FOV
-            std::this_thread::sleep_for(std::chrono::seconds(1));
-        }
         if (isPressed(FORCEQUIT_KEY)) exit(128);
     }
     return 0;
@@ -64,12 +60,12 @@ void trigger() {
     std::this_thread::sleep_for(std::chrono::seconds(1));
     while (true) {
         std::this_thread::sleep_for(std::chrono::milliseconds(12));
-        if (isPressed(TRIGGERBOT_KEY) && ourPlayer.isLivePlayer(ourHealth)) {
+        if (isPressed(TRIGGERBOT_KEY) && ourHealth > 0) {
             int xhair = Memory->read<int>(ourPlayer.playerAddress + crosshairid);
             player xhairPlayer;
             if (xhair <= 64 && xhair > 0) {
                 xhairPlayer.initializeXhair(xhair - 1); // Some reason 0x10 didn't work. 0x20 did
-                if (xhairPlayer.team() != ourTeam && xhairPlayer.isLivePlayer(xhairPlayer.health())) click();
+                if (Memory->read<int>(xhairPlayer.playerAddress + teamOffset) != ourTeam) click();
             }
         }
     }
@@ -77,8 +73,8 @@ void trigger() {
 void bhop() {
     std::this_thread::sleep_for(std::chrono::seconds(1));
     while (true) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(24));
-        if (ourPlayer.isLivePlayer(ourHealth) && isPressed(BHOP_KEY) && ourPlayer.flags() & PL_INAIR) pressVKey(kVK_Space);
+        std::this_thread::sleep_for(std::chrono::milliseconds(24)); // Turn this down if you want more consistant hops
+        if (ourHealth > 0 && isPressed(BHOP_KEY) && Memory->read<int>(ourPlayer.playerAddress + m_fFlags) & PL_INAIR) pressVKey(kVK_Space);
     }
 }
 std::string randomString() {
