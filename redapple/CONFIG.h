@@ -19,5 +19,5 @@
 #define FORCEQUIT_KEY kVK_PageDown // Forcequit key
 #define BHOP_KEY kVK_ANSI_KeypadMinus
 
-//Colours can be changed in helper.h around line 150
+//Colours can be changed in helper.h around line 130
 

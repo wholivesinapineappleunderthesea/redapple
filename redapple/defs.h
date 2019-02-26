@@ -34,10 +34,10 @@ uint64_t isDefusing = 0x4208;
 uint64_t isTakingHostage = 0x4209;
 uint64_t m_iGlowIndex = 0xAD18;
 uint64_t boneMatrix = 0x2C70;
-uint64_t dwLocalPlayer = 0x14ef0e8;
-uint64_t dwRadarBase = 0x1e76c58;
-uint64_t dwEntityList = 0x14fb3c8;
-uint64_t dwGlowObjectManager = 0x1d630e0;
+uint64_t dwLocalPlayer = 0x14f0108;
+uint64_t dwRadarBase = 0x1e77c98;
+uint64_t dwEntityList = 0x14fc3e8;
+uint64_t dwGlowObjectManager = 0x1d64100;
 uint64_t localPlayerAddress; // localplayer
 uint64_t m_bUseCustomAutoExposureMin = 0x0F65;
 uint64_t m_bUseCustomAutoExposureMax =  0x0F66;

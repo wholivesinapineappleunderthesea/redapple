@@ -59,16 +59,14 @@ public:
             content = (type) *(type *)(data);
             vm_deallocate(current_task(), data, sz);
         }
-        
         return content;
     }
     template <typename type>
     bool write(mach_vm_address_t address, type data) {
-        kern_return_t kr = vm_write(csgoTask, address, (vm_offset_t)&data, sizeof(data));
-        if (kr == KERN_SUCCESS) {
-            return true;
+        if (address != NULL) {
+            kern_return_t kr = vm_write(csgoTask, address, (vm_offset_t)&data, sizeof(data));
+            if (kr == KERN_SUCCESS) return true;
         }
-        
         return false;
     }
 };
@@ -124,22 +122,22 @@ public:
     void glowOutline(int ourTeam) {
         uint64_t glowBase = glowObjectManager + (0x40 * Memory->read<int>(this->playerAddress + m_iGlowIndex));
         clr playerGlowColor;
-        if (this->isDoingObjective()) { // Defusing or grabbing, different colour
+        if (this->isDoingObjective()) { // Defusing or grabbing, different colour (DEF PURPLE/PINK)
             playerGlowColor.r = 0.0f;
             playerGlowColor.g = 255.0f;
             playerGlowColor.b = 255.0f;
             playerGlowColor.a = 10.0f;
-        } else if (Memory->read<int>(this->playerAddress + teamOffset) == ourTeam) { // Teammate
+        } else if (Memory->read<int>(this->playerAddress + teamOffset) == ourTeam) { // Teammate (DEF BLUE)
             playerGlowColor.r = 0.0f;
             playerGlowColor.g = 1.0f;
             playerGlowColor.b = 255.0f;
             playerGlowColor.a = 0.25f;
-        } else if (Memory->read<int>(this->playerAddress + b_isScoped)) { // Scoped In
+        } else if (Memory->read<bool>(this->playerAddress + isSpotted)) { // Spotted (DEF GREEN)
             playerGlowColor.r = 0.0f;
             playerGlowColor.g = 125.0f;
             playerGlowColor.b = 0.0f;
             playerGlowColor.a = 0.75f;
-        } else { // Enemy
+        } else { // Enemy (DEF RED)
             playerGlowColor.r = 255.0f;
             playerGlowColor.g = 0.0f;
             playerGlowColor.b = 0.0f;

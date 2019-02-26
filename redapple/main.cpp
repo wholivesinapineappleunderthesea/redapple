@@ -17,6 +17,7 @@
 #include "CONFIG.h"
 player ourPlayer;
 int ourTeam, ourHealth;
+bool ourIsLegit;
 int main(int argc, const char * argv[]) {
     srand(time(NULL));
     if (getuid() != 0) errorExit(255, " Yikes, Gotta run as root; We can't use task_for_pid() without being root.");
@@ -34,14 +35,13 @@ int main(int argc, const char * argv[]) {
         std::thread bhopThread(bhop);
         bhopThread.detach();
     }
-    ourTeam = Memory->read<int>(ourPlayer.playerAddress + teamOffset);
-    ourHealth = Memory->read<int>(ourPlayer.playerAddress + healthOffset);
     while (true) {
-        std::this_thread::sleep_for(std::chrono::seconds(5));
         ourTeam = Memory->read<int>(ourPlayer.playerAddress + teamOffset);
         ourHealth = Memory->read<int>(ourPlayer.playerAddress + healthOffset);
+        if (ourTeam == 2 || ourTeam == 3) ourIsLegit = true; else ourIsLegit = false;
         std::cout << "\033]0;" << randomString() << "\007"; // Change console title
         if (isPressed(FORCEQUIT_KEY)) exit(128);
+        std::this_thread::sleep_for(std::chrono::seconds(5));
     }
     return 0;
 }
@@ -49,10 +49,12 @@ void esp() {
     std::this_thread::sleep_for(std::chrono::seconds(1));
     player espPlayer;
     while (true) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(60));
-        for (int i = 1; i <= 64; i++) {
-            espPlayer.initialize(i);
-            espPlayer.glowOutline(ourTeam);
+        std::this_thread::sleep_for(std::chrono::milliseconds(14));
+        if (ourIsLegit) {
+            for (int i = 1; i <= 64; i++) {
+                espPlayer.initialize(i);
+                espPlayer.glowOutline(ourTeam);
+            }
         }
     }
 }
@@ -60,7 +62,7 @@ void trigger() {
     std::this_thread::sleep_for(std::chrono::seconds(1));
     while (true) {
         std::this_thread::sleep_for(std::chrono::milliseconds(12));
-        if (isPressed(TRIGGERBOT_KEY) && ourHealth > 0) {
+        if (isPressed(TRIGGERBOT_KEY) && ourIsLegit) {
             int xhair = Memory->read<int>(ourPlayer.playerAddress + crosshairid);
             player xhairPlayer;
             if (xhair <= 64 && xhair > 0) {
@@ -73,8 +75,8 @@ void trigger() {
 void bhop() {
     std::this_thread::sleep_for(std::chrono::seconds(1));
     while (true) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(24)); // Turn this down if you want more consistant hops
-        if (ourHealth > 0 && isPressed(BHOP_KEY) && Memory->read<int>(ourPlayer.playerAddress + m_fFlags) & PL_INAIR) pressVKey(kVK_Space);
+        std::this_thread::sleep_for(std::chrono::milliseconds(12)); // Turn this down if you want more consistant hops
+        if (ourIsLegit && isPressed(BHOP_KEY) && Memory->read<int>(ourPlayer.playerAddress + m_fFlags) & PL_INAIR) pressVKey(kVK_Space);
     }
 }
 std::string randomString() {
