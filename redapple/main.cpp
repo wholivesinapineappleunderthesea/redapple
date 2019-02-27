@@ -13,6 +13,7 @@
 #include <string>
 #include <chrono>
 #include <Carbon/Carbon.h>
+#include <sstream>
 #include "helper.h"
 #include "CONFIG.h"
 player ourPlayer;
@@ -53,7 +54,8 @@ void esp() {
         if (ourIsLegit) {
             for (int i = 1; i <= 64; i++) {
                 espPlayer.initialize(i);
-                espPlayer.glowOutline(ourTeam);
+                if (espAlways) espPlayer.glowOutline(ourTeam);
+                else if (isPressed(ESP_KEY)) espPlayer.glowOutline(ourTeam); else espPlayer.glowChams(ourTeam);
             }
         }
     }
