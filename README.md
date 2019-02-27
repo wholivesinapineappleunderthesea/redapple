@@ -5,11 +5,13 @@ Look in CONFIG.h for configuration
 
 # Building
 
-You can do this in the terminal or Xcode.
+Open up your favourite terminal, cd to the downloaded project. Then type:
 
-Run xcodebuild in the terminal (in the redapple directory). Then the executable will be in build/Release/.
+'''make'''
 
-Or in Xcode run it, then drag the redapple executable into your root shell.
+You may need binutils from brew.
+
+Then in the folder, there will be an executable with a random name (numbers), run it as root or with sudo.
 
 # Why root
 

@@ -1,7 +1,11 @@
 //CONFIGURATION:
+// RADAR:
+#define radarEnable true // Radar
+
 //ESP:
 #define espEnabled true
 #define espAlways false // ESP has a key, turn this to true for ESP to always be on
+
 //TRIGGERBOT
 #define triggerEnable true
 

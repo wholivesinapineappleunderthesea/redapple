@@ -16,10 +16,11 @@
 #include <sstream>
 #include "helper.h"
 #include "CONFIG.h"
+
 player ourPlayer;
 int ourTeam, ourHealth;
 bool ourIsLegit;
-int main(int argc, const char * argv[]) {
+int main(int argc, char * argv[]) {
     srand(time(NULL));
     if (getuid() != 0) errorExit(255, " Yikes, Gotta run as root; We can't use task_for_pid() without being root.");
     memHelper->setup();
@@ -40,7 +41,7 @@ int main(int argc, const char * argv[]) {
         ourTeam = Memory->read<int>(ourPlayer.playerAddress + teamOffset);
         ourHealth = Memory->read<int>(ourPlayer.playerAddress + healthOffset);
         if (ourTeam == 2 || ourTeam == 3) ourIsLegit = true; else ourIsLegit = false;
-        std::cout << "\033]0;" << randomString() << "\007"; // Change console title
+        std::cout << "\033]0;" << randomString() << "\007"; // Change console title (Hide from VAC)
         if (isPressed(FORCEQUIT_KEY)) exit(128);
         std::this_thread::sleep_for(std::chrono::seconds(5));
     }
@@ -87,7 +88,7 @@ std::string randomString() {
     for (int z = 0; z < rand(); z++) a += alphanum[rand() % alphaLength];
     return a;
 }
-void errorExit(int code, const char * exitData) {
+void errorExit(int code, std::string exitData) {
     std::cout << "Error: " << code << exitData << std::endl;
     sleep(5);
     exit(code);

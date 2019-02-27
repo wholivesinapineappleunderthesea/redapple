@@ -117,6 +117,9 @@ public:
             return true;
         return false;
     }
+    Vec3 playerPosition() {
+        return Memory->read<Vec3>(this->playerAddress + 0x170);
+    }
     void initialize(int index) {
         this->playerAddress = Memory->read<uint64_t>(clientModule + dwEntityList + index * 0x10);
     }
@@ -152,6 +155,7 @@ public:
         }
         Memory->write<clr>(glowBase + 0x8, playerGlowColor);
         Memory->write<bool>(glowBase + 0x28, true); // Render when occluded
+        Memory->write<bool>(glowBase + 0x29, false); // Render when unoccluded
     }
     void glowChams(int ourTeam) {
         uint64_t glowBase = glowObjectManager + (0x40 * Memory->read<int>(this->playerAddress + m_iGlowIndex));
@@ -179,7 +183,8 @@ public:
         }
         Memory->write<clr>(glowBase + 0x8, playerGlowColor);
         Memory->write<bool>(glowBase + 0x28, true); // Render when occluded
-        Memory->write<bool>(glowBase + 0x30, true); // Full bloom
+        Memory->write<bool>(glowBase + 0x29, true); // Render when unoccluded
+        Memory->write<bool>(glowBase + 0x30, true); // Full bloom render
     }
 };
 #endif /* helper_h */

@@ -1,7 +1,7 @@
 #ifndef defs_h
 #define defs_h
-
-void errorExit(int code, const char * exitData);
+#define GL_SILENCE_DEPRECATION
+void errorExit(int code, std::string exitData);
 std::string randomString();
 void pressVKey(unsigned short key);
 bool isPressed(unsigned short inKeyCode);
@@ -18,6 +18,7 @@ mach_vm_address_t engineModule;
 uint64_t glowObjectManager;
 
 struct clr { float r, g, b, a; };
+struct clrNoAlpha { float r, g, b; };
 struct Vec3 { float x, y, z; };
 static const char alphanum[] = "!@#wvutsrqponmlkjihgfedcbaZYXWVUTSRQPONMLKJIHGFEDCBA9876543210*&^%$xyz";
 
@@ -34,6 +35,7 @@ uint64_t isDefusing = 0x4208;
 uint64_t isTakingHostage = 0x4209;
 uint64_t m_iGlowIndex = 0xAD18;
 uint64_t boneMatrix = 0x2C70;
+uint64_t clrRender = 0x0A8;
 uint64_t dwLocalPlayer = 0x14f0108;
 uint64_t dwRadarBase = 0x1e77c98;
 uint64_t dwEntityList = 0x14fc3e8;
