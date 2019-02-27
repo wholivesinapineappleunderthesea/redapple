@@ -7,7 +7,7 @@ Look in CONFIG.h for configuration
 
 Open up your favourite terminal, cd to the downloaded project. Then type:
 
-'''make'''
+>make --always-make
 
 You may need binutils from brew.
 
