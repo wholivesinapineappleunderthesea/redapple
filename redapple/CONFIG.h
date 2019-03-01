@@ -11,6 +11,9 @@
 //BHOP:
 #define bhopEnable true
 
+//RCS:
+#define rcsEnable true
+
 //TRIGGERBOT SPEED (MS) TODO: Get working
 #define MIN_TRIGGERBOT_SPEED 26 // Min triggerbot speed
 #define MAX_TRIGGERBOT_SPEED 211 // Max triggerbot speed

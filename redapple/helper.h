@@ -131,14 +131,14 @@ public:
         this->playerAddress = Memory->read<uint64_t>(clientModule + dwLocalPlayer);
     }
     void glowOutline(int ourTeam) {
-        uint64_t glowBase = glowObjectManager + (0x40 * Memory->read<int>(this->playerAddress + m_iGlowIndex));
+        uint64_t glowBase = glowObjectManager + (0x40 * Memory->read<int>(this->playerAddress + offsets::m_iGlowIndex));
         clr playerGlowColor;
         if (this->isDoingObjective()) { // Defusing or grabbing, different colour (DEF GREEN)
             playerGlowColor.r = 0.0f;
             playerGlowColor.g = 125.0f;
             playerGlowColor.b = 0.0f;
             playerGlowColor.a = 10.0f;
-        } else if (Memory->read<int>(this->playerAddress + m_iTeamNum) == ourTeam) { // Teammate (DEF BLUE)
+        } else if (Memory->read<int>(this->playerAddress + offsets::m_iTeamNum) == ourTeam) { // Teammate (DEF BLUE)
             playerGlowColor.r = 0.0f;
             playerGlowColor.g = 1.0f;
             playerGlowColor.b = 255.0f;
