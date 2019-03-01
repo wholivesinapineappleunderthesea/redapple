@@ -4,7 +4,6 @@
 
 //ESP:
 #define espEnabled true
-#define espAlways false // ESP has a key, turn this to true for ESP to always be on
 
 //TRIGGERBOT
 #define triggerEnable true
@@ -22,6 +21,7 @@
 #define TRIGGERBOT_KEY kVK_ANSI_X // Triggerbot key
 #define FORCEQUIT_KEY kVK_PageDown // Forcequit key
 #define BHOP_KEY kVK_ANSI_KeypadMinus // Bunny hop key
-#define ESP_KEY kVK_ANSI_C
 //Colours can be changed in helper.h around line 130
 
+//EXTRA
+#define MAX_PLAYER_LIST 64 // Max of 32 players, if playing with more, set to 64

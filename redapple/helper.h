@@ -108,12 +108,13 @@ public:
     }
 };
 memstuffs * memHelper = new memstuffs(); // Game helper
-
+float r = 200.0f, g = 0.0f, b = 200.0f;
+bool decreasered, decreasegreen, decreaseblue;
 class player {
 public:
     uint64_t playerAddress;
     bool isDoingObjective() {
-        if (Memory->read<bool>(this->playerAddress + isTakingHostage) || Memory->read<bool>(playerAddress + isDefusing))
+        if (Memory->read<bool>(this->playerAddress + m_bIsGrabbingHostage) || Memory->read<bool>(playerAddress + m_bIsDefusing))
             return true;
         return false;
     }
@@ -132,59 +133,25 @@ public:
     void glowOutline(int ourTeam) {
         uint64_t glowBase = glowObjectManager + (0x40 * Memory->read<int>(this->playerAddress + m_iGlowIndex));
         clr playerGlowColor;
-        if (this->isDoingObjective()) { // Defusing or grabbing, different colour (DEF PURPLE/PINK)
+        if (this->isDoingObjective()) { // Defusing or grabbing, different colour (DEF GREEN)
             playerGlowColor.r = 0.0f;
-            playerGlowColor.g = 255.0f;
-            playerGlowColor.b = 255.0f;
+            playerGlowColor.g = 125.0f;
+            playerGlowColor.b = 0.0f;
             playerGlowColor.a = 10.0f;
-        } else if (Memory->read<int>(this->playerAddress + teamOffset) == ourTeam) { // Teammate (DEF BLUE)
+        } else if (Memory->read<int>(this->playerAddress + m_iTeamNum) == ourTeam) { // Teammate (DEF BLUE)
             playerGlowColor.r = 0.0f;
             playerGlowColor.g = 1.0f;
             playerGlowColor.b = 255.0f;
             playerGlowColor.a = 0.25f;
-        } else if (Memory->read<bool>(this->playerAddress + isSpotted)) { // Spotted (DEF GREEN)
-            playerGlowColor.r = 0.0f;
-            playerGlowColor.g = 125.0f;
-            playerGlowColor.b = 0.0f;
-            playerGlowColor.a = 0.75f;
-        } else { // Enemy (DEF RED)
+        } else { // Enemy (DEF PURPLE/PINK)
             playerGlowColor.r = 255.0f;
             playerGlowColor.g = 0.0f;
-            playerGlowColor.b = 0.0f;
-            playerGlowColor.a = 0.5f;
+            playerGlowColor.b = 255.0f;
+            playerGlowColor.a = 0.3f;
         }
         Memory->write<clr>(glowBase + 0x8, playerGlowColor);
         Memory->write<bool>(glowBase + 0x28, true); // Render when occluded
         Memory->write<bool>(glowBase + 0x29, false); // Render when unoccluded
-    }
-    void glowChams(int ourTeam) {
-        uint64_t glowBase = glowObjectManager + (0x40 * Memory->read<int>(this->playerAddress + m_iGlowIndex));
-        clr playerGlowColor;
-        if (this->isDoingObjective()) { // Defusing or grabbing, different colour (DEF PURPLE/PINK)
-            playerGlowColor.r = 0.0f;
-            playerGlowColor.g = 255.0f;
-            playerGlowColor.b = 255.0f;
-            playerGlowColor.a = 10.0f;
-        } else if (Memory->read<int>(this->playerAddress + teamOffset) == ourTeam) { // Teammate (DEF BLUE)
-            playerGlowColor.r = 0.0f;
-            playerGlowColor.g = 1.0f;
-            playerGlowColor.b = 255.0f;
-            playerGlowColor.a = 0.25f;
-        } else if (Memory->read<bool>(this->playerAddress + isSpotted)) { // Spotted (DEF GREEN)
-            playerGlowColor.r = 0.0f;
-            playerGlowColor.g = 125.0f;
-            playerGlowColor.b = 0.0f;
-            playerGlowColor.a = 0.75f;
-        } else { // Enemy (DEF RED)
-            playerGlowColor.r = 255.0f;
-            playerGlowColor.g = 0.0f;
-            playerGlowColor.b = 0.0f;
-            playerGlowColor.a = 0.5f;
-        }
-        Memory->write<clr>(glowBase + 0x8, playerGlowColor);
-        Memory->write<bool>(glowBase + 0x28, true); // Render when occluded
-        Memory->write<bool>(glowBase + 0x29, true); // Render when unoccluded
-        Memory->write<bool>(glowBase + 0x30, true); // Full bloom render
     }
 };
 #endif /* helper_h */

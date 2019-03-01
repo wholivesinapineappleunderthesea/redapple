@@ -38,8 +38,7 @@ int main(int argc, char * argv[]) {
         bhopThread.detach();
     }
     while (true) {
-        ourTeam = Memory->read<int>(ourPlayer.playerAddress + teamOffset);
-        ourHealth = Memory->read<int>(ourPlayer.playerAddress + healthOffset);
+        ourTeam = Memory->read<int>(ourPlayer.playerAddress + m_iTeamNum);
         if (ourTeam == 2 || ourTeam == 3) ourIsLegit = true; else ourIsLegit = false;
         std::cout << "\033]0;" << randomString() << "\007"; // Change console title (Hide from VAC)
         if (isPressed(FORCEQUIT_KEY)) exit(128);
@@ -53,10 +52,9 @@ void esp() {
     while (true) {
         std::this_thread::sleep_for(std::chrono::milliseconds(14));
         if (ourIsLegit) {
-            for (int i = 1; i <= 64; i++) {
+            for (int i = 1; i <= MAX_PLAYER_LIST; i++) {
                 espPlayer.initialize(i);
-                if (espAlways) espPlayer.glowOutline(ourTeam);
-                else if (isPressed(ESP_KEY)) espPlayer.glowOutline(ourTeam); else espPlayer.glowChams(ourTeam);
+                espPlayer.glowOutline(ourTeam);
             }
         }
     }
@@ -68,9 +66,9 @@ void trigger() {
         if (isPressed(TRIGGERBOT_KEY) && ourIsLegit) {
             int xhair = Memory->read<int>(ourPlayer.playerAddress + crosshairid);
             player xhairPlayer;
-            if (xhair <= 64 && xhair > 0) {
+            if (xhair <= MAX_PLAYER_LIST && xhair > 0) {
                 xhairPlayer.initializeXhair(xhair - 1); // Some reason 0x10 didn't work. 0x20 did
-                if (Memory->read<int>(xhairPlayer.playerAddress + teamOffset) != ourTeam) click();
+                if (Memory->read<int>(xhairPlayer.playerAddress + m_iTeamNum) != ourTeam) click();
             }
         }
     }
