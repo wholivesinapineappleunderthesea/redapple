@@ -97,7 +97,7 @@ public:
         if (engineModule == NULL) errorExit(6, " Dang! Couldn't get engine.dylib!");
     }
     void setupGlowManager() {
-        glowObjectManager = Memory->read<uint64_t>(clientModule + dwGlowObjectManager);
+        glowObjectManager = Memory->read<uint64_t>(clientModule + offsets::dwGlowObjectManager);
     }
     void setup() {
         initCSGOPid();
@@ -114,7 +114,7 @@ class player {
 public:
     uint64_t playerAddress;
     bool isDoingObjective() {
-        if (Memory->read<bool>(this->playerAddress + m_bIsGrabbingHostage) || Memory->read<bool>(playerAddress + m_bIsDefusing))
+        if (Memory->read<bool>(this->playerAddress + offsets::m_bIsGrabbingHostage) || Memory->read<bool>(playerAddress + offsets::m_bIsDefusing))
             return true;
         return false;
     }
@@ -122,13 +122,13 @@ public:
         return Memory->read<Vec3>(this->playerAddress + 0x170);
     }
     void initialize(int index) {
-        this->playerAddress = Memory->read<uint64_t>(clientModule + dwEntityList + index * 0x10);
+        this->playerAddress = Memory->read<uint64_t>(clientModule + offsets::dwEntityList + index * 0x10);
     }
     void initializeXhair(int index) {
-        this->playerAddress = Memory->read<uint64_t>(clientModule + dwEntityList + index * 0x20);
+        this->playerAddress = Memory->read<uint64_t>(clientModule + offsets::dwEntityList + index * 0x20);
     }
     void initializeLocal() {
-        this->playerAddress = Memory->read<uint64_t>(clientModule + dwLocalPlayer);
+        this->playerAddress = Memory->read<uint64_t>(clientModule + offsets::dwLocalPlayer);
     }
     void glowOutline(int ourTeam) {
         uint64_t glowBase = glowObjectManager + (0x40 * Memory->read<int>(this->playerAddress + offsets::m_iGlowIndex));
