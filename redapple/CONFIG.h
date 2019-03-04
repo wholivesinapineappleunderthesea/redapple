@@ -1,18 +1,12 @@
 //CONFIGURATION:
-// RADAR:
-#define radarEnable true // Radar
-
 //ESP:
-#define espEnabled true
+#define espEnabled // COMMENT OUT TO DISABLE
 
 //TRIGGERBOT
-#define triggerEnable true
+#define triggerEnable // COMMENT OUT TO DISABLE
 
 //BHOP:
-#define bhopEnable true
-
-//RCS:
-#define rcsEnable true
+#define bhopEnable // COMMENT OUT TO DISABLE
 
 //TRIGGERBOT SPEED (MS) TODO: Get working
 #define MIN_TRIGGERBOT_SPEED 26 // Min triggerbot speed

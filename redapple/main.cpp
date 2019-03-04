@@ -21,24 +21,24 @@ player ourPlayer;
 int ourTeam, ourHealth;
 bool ourIsLegit;
 int main(int argc, char * argv[]) {
-    srand(time(NULL));
+    srand(static_cast<unsigned int>(time(NULL)));
     if (getuid() != 0) errorExit(255, " Yikes, Gotta run as root; We can't use task_for_pid() without being root.");
     memHelper->setup();
     ourPlayer.initializeLocal();
-    if (espEnabled) {
-        std::thread espThread(esp);
-        espThread.detach();
-    }
-    if (triggerEnable) {
-        std::thread triggerThread(trigger);
-        triggerThread.detach();
-    }
-    if (bhopEnable) {
-        std::thread bhopThread(bhop);
-        bhopThread.detach();
-    }
+#ifdef espEnabled
+    std::thread espThread(esp);
+    espThread.detach();
+#endif
+#ifdef triggerEnable
+    std::thread triggerThread(trigger);
+    triggerThread.detach();
+#endif
+#ifdef bhopEnable
+    std::thread bhopThread(bhop);
+    bhopThread.detach();
+#endif
     while (true) {
-        ourTeam = Memory->read<int>(ourPlayer.playerAddress + offsets::m_iTeamNum);
+        ourTeam = Memory->read<int>(ourPlayer.playerAddress + m_iTeamNum);
         if (ourTeam == 2 || ourTeam == 3) ourIsLegit = true; else ourIsLegit = false;
         std::cout << "\033]0;" << randomString() << "\007"; // Change console title (Hide from VAC)
         if (isPressed(FORCEQUIT_KEY)) exit(128);
@@ -64,11 +64,11 @@ void trigger() {
     while (true) {
         std::this_thread::sleep_for(std::chrono::milliseconds(12));
         if (isPressed(TRIGGERBOT_KEY) && ourIsLegit) {
-            int xhair = Memory->read<int>(ourPlayer.playerAddress + offsets::crosshairid);
+            int xhair = Memory->read<int>(ourPlayer.playerAddress + crosshairid);
             player xhairPlayer;
             if (xhair <= MAX_PLAYER_LIST && xhair > 0) {
                 xhairPlayer.initializeXhair(xhair - 1); // Some reason 0x10 didn't work. 0x20 did
-                if (Memory->read<int>(xhairPlayer.playerAddress + offsets::m_iTeamNum) != ourTeam) click();
+                if (Memory->read<int>(xhairPlayer.playerAddress + m_iTeamNum) != ourTeam) click();
             }
         }
     }
@@ -77,7 +77,7 @@ void bhop() {
     std::this_thread::sleep_for(std::chrono::seconds(1));
     while (true) {
         std::this_thread::sleep_for(std::chrono::milliseconds(12)); // Turn this down if you want more consistant hops
-        if (ourIsLegit && isPressed(BHOP_KEY) && Memory->read<int>(ourPlayer.playerAddress + offsets::m_fFlags) & PL_INAIR) pressVKey(kVK_Space);
+        if (ourIsLegit && isPressed(BHOP_KEY) && Memory->read<int>(ourPlayer.playerAddress + m_fFlags) & PL_INAIR) pressVKey(kVK_Space);
     }
 }
 std::string randomString() {

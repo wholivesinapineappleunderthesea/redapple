@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6E1D3683222CBA87007A21EE /* libmacho.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E1D3682222CBA87007A21EE /* libmacho.tbd */; };
 		6E55B6342227287D00F4FB62 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E55B6332227287D00F4FB62 /* GLUT.framework */; };
 		6E55B6362227288200F4FB62 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E55B6352227288200F4FB62 /* OpenGL.framework */; };
 		6EF45A66221F62B6001F0E6F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EF45A65221F62B6001F0E6F /* main.cpp */; };
@@ -29,6 +30,7 @@
 
 /* Begin PBXFileReference section */
 		6E14473B2221E6950018CB40 /* credits */ = {isa = PBXFileReference; lastKnownFileType = text; path = credits; sourceTree = "<group>"; };
+		6E1D3682222CBA87007A21EE /* libmacho.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libmacho.tbd; path = usr/lib/system/libmacho.tbd; sourceTree = SDKROOT; };
 		6E55B6332227287D00F4FB62 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
 		6E55B6352227288200F4FB62 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		6E5AE03E22209112001BAD1E /* CONFIG.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CONFIG.h; sourceTree = "<group>"; };
@@ -46,11 +48,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6E1D3683222CBA87007A21EE /* libmacho.tbd in Frameworks */,
+				6EF45A70221F66E7001F0E6F /* IOKit.framework in Frameworks */,
 				6E55B6362227288200F4FB62 /* OpenGL.framework in Frameworks */,
 				6E55B6342227287D00F4FB62 /* GLUT.framework in Frameworks */,
 				6EF45A74221F66F7001F0E6F /* ApplicationServices.framework in Frameworks */,
 				6EF45A72221F66F0001F0E6F /* Carbon.framework in Frameworks */,
-				6EF45A70221F66E7001F0E6F /* IOKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,6 +92,7 @@
 		6EF45A6E221F66E7001F0E6F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6E1D3682222CBA87007A21EE /* libmacho.tbd */,
 				6E55B6352227288200F4FB62 /* OpenGL.framework */,
 				6E55B6332227287D00F4FB62 /* GLUT.framework */,
 				6EF45A73221F66F7001F0E6F /* ApplicationServices.framework */,
@@ -276,6 +280,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/usr/lib/system",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -284,6 +292,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/usr/lib/system",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

@@ -9,7 +9,8 @@ public:
         for (int i = 1; i < sizeof(pids); i++) {
             char curpidName[1024];
             proc_name(pids[i], curpidName, sizeof(curpidName));
-            if (!strncmp(curpidName, procName, sizeof(procName))) return pids[i];
+            size_t sizeOfName = sizeof(procName);
+            if (!strncmp(curpidName, procName, sizeOfName)) return pids[i];
         }
         return 0;
     }
@@ -44,7 +45,7 @@ public:
             g_dii[i].imageLoadAddress = dii[i].imageLoadAddress;
             if (strstr(imgName, modName) != NULL) return (mach_vm_address_t)dii[i].imageLoadAddress;
         }
-        return NULL;
+        return 0x0;
     }
     template <typename type>
     type read(mach_vm_address_t address, size_t extraSize = sizeof(type)) {
@@ -66,16 +67,6 @@ public:
         }
         return false;
     }
-    uint8_t * readTo(vm_address_t modStart, size_t modSize) {
-        uint8_t * buf = nullptr;
-        vm_offset_t memoryFromRead;
-        mach_msg_type_number_t maxSize = (mach_msg_type_number_t)modSize;
-        kern_return_t kr = vm_read(csgoTask, modStart, maxSize, &memoryFromRead, &maxSize);
-        if (kr == KERN_FAILURE) errorExit(69, " Reading data from game into buffer failed, pattern scanner failure");
-        uint64_t address = (uint64_t)memoryFromRead;
-        buf = (uint8_t *)address;
-        return buf;
-    }
 };
 MemoryManager * Memory = new MemoryManager();
 
@@ -90,14 +81,14 @@ public:
     }
     void getClient() {
         clientModule = Memory->getModule("/client_panorama.dylib");
-        if (clientModule == NULL) errorExit(5, " Hocking Heck! Couldn't get client_panorama.dylib!");
+        if (clientModule == 0x0) errorExit(5, " Hocking Heck! Couldn't get client_panorama.dylib!");
     }
     void getEngine() {
         engineModule = Memory->getModule("/engine.dylib");
-        if (engineModule == NULL) errorExit(6, " Dang! Couldn't get engine.dylib!");
+        if (engineModule == 0x0) errorExit(6, " Dang! Couldn't get engine.dylib!");
     }
     void setupGlowManager() {
-        glowObjectManager = Memory->read<uint64_t>(clientModule + offsets::dwGlowObjectManager);
+        glowObjectManager = Memory->read<uint64_t>(clientModule + dwGlowObjectManager);
     }
     void setup() {
         initCSGOPid();
@@ -108,13 +99,11 @@ public:
     }
 };
 memstuffs * memHelper = new memstuffs(); // Game helper
-float r = 200.0f, g = 0.0f, b = 200.0f;
-bool decreasered, decreasegreen, decreaseblue;
 class player {
 public:
     uint64_t playerAddress;
     bool isDoingObjective() {
-        if (Memory->read<bool>(this->playerAddress + offsets::m_bIsGrabbingHostage) || Memory->read<bool>(playerAddress + offsets::m_bIsDefusing))
+        if (Memory->read<bool>(this->playerAddress + m_bIsGrabbingHostage) || Memory->read<bool>(playerAddress + m_bIsDefusing))
             return true;
         return false;
     }
@@ -122,23 +111,23 @@ public:
         return Memory->read<Vec3>(this->playerAddress + 0x170);
     }
     void initialize(int index) {
-        this->playerAddress = Memory->read<uint64_t>(clientModule + offsets::dwEntityList + index * 0x10);
+        this->playerAddress = Memory->read<uint64_t>(clientModule + dwEntityList + index * 0x10);
     }
     void initializeXhair(int index) {
-        this->playerAddress = Memory->read<uint64_t>(clientModule + offsets::dwEntityList + index * 0x20);
+        this->playerAddress = Memory->read<uint64_t>(clientModule + dwEntityList + index * 0x20);
     }
     void initializeLocal() {
-        this->playerAddress = Memory->read<uint64_t>(clientModule + offsets::dwLocalPlayer);
+        this->playerAddress = Memory->read<uint64_t>(clientModule + dwLocalPlayer);
     }
     void glowOutline(int ourTeam) {
-        uint64_t glowBase = glowObjectManager + (0x40 * Memory->read<int>(this->playerAddress + offsets::m_iGlowIndex));
+        uint64_t glowBase = glowObjectManager + (0x40 * Memory->read<int>(this->playerAddress + m_iGlowIndex));
         clr playerGlowColor;
         if (this->isDoingObjective()) { // Defusing or grabbing, different colour (DEF GREEN)
             playerGlowColor.r = 0.0f;
             playerGlowColor.g = 125.0f;
             playerGlowColor.b = 0.0f;
             playerGlowColor.a = 10.0f;
-        } else if (Memory->read<int>(this->playerAddress + offsets::m_iTeamNum) == ourTeam) { // Teammate (DEF BLUE)
+        } else if (Memory->read<int>(this->playerAddress + m_iTeamNum) == ourTeam) { // Teammate (DEF BLUE)
             playerGlowColor.r = 0.0f;
             playerGlowColor.g = 1.0f;
             playerGlowColor.b = 255.0f;
@@ -151,7 +140,6 @@ public:
         }
         Memory->write<clr>(glowBase + 0x8, playerGlowColor);
         Memory->write<bool>(glowBase + 0x28, true); // Render when occluded
-        Memory->write<bool>(glowBase + 0x29, false); // Render when unoccluded
     }
 };
 #endif /* helper_h */
