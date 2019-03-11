@@ -26,10 +26,10 @@ static const char alphanum[] = "pNHXL9ynxU!ZS3Kdf4Gutl%qr7Ag0O2z@#J1RYWi*kQM5ovw
 //OFFSETS (thanks mrbarbossa man)
 uint64_t m_iGlowIndex = 0xAD18;
 uint64_t crosshairid = 0xbce8;
-uint64_t dwLocalPlayer = 0x14f0108;
-uint64_t dwRadarBase = 0x1e77c98;
-uint64_t dwEntityList = 0x14fc3e8;
-uint64_t dwGlowObjectManager = 0x1d64100;
+uint64_t dwLocalPlayer = 0x14f1128;
+uint64_t dwRadarBase = 0x1e78dd8;
+uint64_t dwEntityList = 0x14fd408;
+uint64_t dwGlowObjectManager = 0x1d65120;
 uint64_t m_Local = 0x3700;
 uint64_t m_aimPunchAngle = 0x3774;
 uint64_t m_viewPunchAngle = 0x3768;

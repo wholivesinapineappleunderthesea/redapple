@@ -140,6 +140,9 @@ public:
         }
         Memory->write<clr>(glowBase + 0x8, playerGlowColor);
         Memory->write<bool>(glowBase + 0x28, true); // Render when occluded
+#ifndef fullBloom
+        Memory->write<bool>(glowBase + 0x30, true); // Full bloom
+#endif
     }
 };
 #endif /* helper_h */

@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6E1D3683222CBA87007A21EE /* libmacho.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E1D3682222CBA87007A21EE /* libmacho.tbd */; };
 		6E55B6342227287D00F4FB62 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E55B6332227287D00F4FB62 /* GLUT.framework */; };
 		6E55B6362227288200F4FB62 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E55B6352227288200F4FB62 /* OpenGL.framework */; };
 		6EF45A66221F62B6001F0E6F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6EF45A65221F62B6001F0E6F /* main.cpp */; };
@@ -48,7 +47,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6E1D3683222CBA87007A21EE /* libmacho.tbd in Frameworks */,
 				6EF45A70221F66E7001F0E6F /* IOKit.framework in Frameworks */,
 				6E55B6362227288200F4FB62 /* OpenGL.framework in Frameworks */,
 				6E55B6342227287D00F4FB62 /* GLUT.framework in Frameworks */,
