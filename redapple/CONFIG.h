@@ -1,13 +1,13 @@
 //CONFIGURATION:
 //ESP:
-#define espEnabled 123// COMMENT OUT TO DISABLE
-//#define fullBloom 123// COMMENT OUT TO DISABLE
+#define espEnabled // COMMENT OUT TO DISABLE
+#define fullBloom // COMMENT OUT TO DISABLE
 
 //TRIGGERBOT
-#define triggerEnable 123// COMMENT OUT TO DISABLE
+#define triggerEnable // COMMENT OUT TO DISABLE
 
 //BHOP:
-#define bhopEnable 123// COMMENT OUT TO DISABLE
+#define bhopEnable // COMMENT OUT TO DISABLE
 
 //TRIGGERBOT SPEED (MS) TODO: Get working
 #define MIN_TRIGGERBOT_SPEED 26 // Min triggerbot speed

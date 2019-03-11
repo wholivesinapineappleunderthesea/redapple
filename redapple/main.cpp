@@ -77,7 +77,7 @@ void bhop() {
     std::this_thread::sleep_for(std::chrono::seconds(1));
     while (true) {
         std::this_thread::sleep_for(std::chrono::milliseconds(12)); // Turn this down if you want more consistant hops
-        if (ourIsLegit && isPressed(BHOP_KEY) && Memory->read<int>(ourPlayer.playerAddress + m_fFlags) & PL_INAIR) pressVKey(kVK_Space);
+        if (ourIsLegit && isPressed(BHOP_KEY)) if (Memory->read<int>(ourPlayer.playerAddress + m_fFlags) & PL_INAIR) pressVKey(kVK_Space);
     }
 }
 std::string randomString() {
