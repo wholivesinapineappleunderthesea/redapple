@@ -24,6 +24,7 @@ int main(int argc, char * argv[]) {
     srand(static_cast<unsigned int>(time(NULL)));
     if (getuid() != 0) errorExit(255, " Yikes, Gotta run as root; We can't use task_for_pid() without being root.");
     memHelper->setup();
+    printf("0x%jx \n", clientModule);
     ourPlayer.initializeLocal();
 #ifdef espEnabled
     std::thread espThread(esp);

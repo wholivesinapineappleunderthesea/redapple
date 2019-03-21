@@ -1,7 +1,7 @@
 //CONFIGURATION:
 //ESP:
 #define espEnabled // COMMENT OUT TO DISABLE
-#define fullBloom // COMMENT OUT TO DISABLE
+//#define fullBloom // COMMENT OUT TO DISABLE
 
 //TRIGGERBOT
 #define triggerEnable // COMMENT OUT TO DISABLE
